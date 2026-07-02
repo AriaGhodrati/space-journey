@@ -1,14 +1,27 @@
+# Python
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-.ipynb_checkpoints/
 
-#CatBoost temporary files
+# Models
+models/*.pkl
+
+# CatBoost logs
 **/catboost_info/
 
+# Jupyter
+.ipynb_checkpoints/
+
+# Notebook outputs
+*.nbconvert.ipynb
+
+# Results
+results/*.png
+results/*.jpg
+
+# Environment
+venv/
+.env
+
+# data
 data/raw/
 data/processed/
-
-.env
-venv/
