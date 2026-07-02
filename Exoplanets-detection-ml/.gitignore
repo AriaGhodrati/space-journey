@@ -4,6 +4,9 @@ __pycache__/
 *.pyd
 .ipynb_checkpoints/
 
+#CatBoost temporary files
+**/catboost_info/
+
 data/raw/
 data/processed/
 
