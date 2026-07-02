@@ -10,6 +10,7 @@ models/*.pkl
 
 # Jupyter
 .ipynb_checkpoints/
+.DS_Store
 
 # Notebook outputs
 *.nbconvert.ipynb
@@ -25,3 +26,4 @@ venv/
 # data
 data/raw/
 data/processed/
+*.csv

@@ -4,6 +4,7 @@ import os
 import joblib
 import pandas as pd
 
+
 from sklearn.model_selection import train_test_split
 
 from xgboost import XGBClassifier
@@ -15,15 +16,25 @@ from preprocess import clean_data, encode_target
 from features import prepare_features
 from evaluate import evaluate_model
 
+from explain import compute_shap_values, plot_shap_summary
+
+from pathlib import Path
+
+
 
 
 # Paths
 
 
-DATA_PATH = "../data/raw/cumulative.csv"
-MODEL_DIR = "../models"
+# Paths
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_PATH = BASE_DIR / "data" / "raw" / "cumulative.csv"
+MODEL_DIR = BASE_DIR / "models"
+RESULTS_DIR = BASE_DIR / "results"
 
-os.makedirs(MODEL_DIR, exist_ok=True)
+MODEL_DIR.mkdir(parents=True, exist_ok=True)
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+
 
 
 
@@ -132,6 +143,30 @@ for model_name, model in models.items():
         joblib.dump(model, model_path)
 
 
+print("\nComputing SHAP values...")
+
+# Selecting a portion of data to reduce SHAP time
+X_sample = X_test[:500]
+
+# Get column names from the original dataframe (X) before scalarizing
+feature_names = X.columns.tolist()
+
+# Convert X_sample to DataFrame with original column names
+X_sample_df = pd.DataFrame(X_sample, columns=feature_names)
+
+# Now run SHAP on the DataFrame, not the Numpy Array
+shap_values = compute_shap_values(best_model, X_sample_df)
+
+shap_values = compute_shap_values(best_model, X_sample)
+save_path = RESULTS_DIR / "shap_summary.png"
+
+plot_shap_summary(
+    shap_values,
+    X_sample,
+    save_path=save_path
+)
+
+print("SHAP summary plot saved at results/shap_summary.png")
 
 # Final Results
 
